@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>GOL World Bucketing Test</title>
+</head>
+
+<body>
+  <h1>Output in console</h1>
+  <p>Each cluster can take 6 cells in its own DATA</p>
+  <p>When this DATA is full, the cluster splits into four children 
+    that each manage cells on one corner of the limits of the parent cell</p>
+  <div class="row">
+    <button id="btn-addcell-tl">Add cell near top-left</button>
+    <button id="btn-addcell-tr">Add cell near top-right</button>
+  </div>
+  <div class="row">
+    <button id="btn-addcell-bl">Add cell near bottom-left</button>
+    <button id="btn-addcell-br">Add cell near bottom-right</button>
+  </div>
+
+  <h1 id="cell-added-ui"></h1>
+
+</body>
+
+</html>

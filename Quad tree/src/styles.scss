@@ -1,0 +1,17 @@
+body {
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: #293a4b;
+  margin: 0;
+  padding: 10px;
+  // overflow: hidden;
+  font-family: Ubuntu, Verdana, Geneva, Tahoma, sans-serif;
+  color: white;
+  box-sizing: border-box;
+}
+
+div.row {
+  > button {
+    display: inline-block;
+  }
+}

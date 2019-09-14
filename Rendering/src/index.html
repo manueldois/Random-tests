@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>GOL Rendering Test</title>
+</head>
+
+<body>
+  <h1>Rendering Test</h1>
+  <p>Worlds 500 * 500 and 5000 * 5000 are built at start and stored.
+    Rendering times shown are the minimum to refresh the view
+  </p>
+
+  <br>
+
+  <section id="section-2d-rect">
+    <h2>5000 * 5000 World 10% filled</h2>
+    <h2>2D canvas with rect() then fill() <code class="exec-time"></code></h2>
+    <label>
+      Downsampling factor
+      <select class="ds-factor">
+        <option value="1">x1</option>
+        <option value="4" selected>x4</option>
+        <option value="9">x9</option>
+      </select>
+    </label>
+    <h3 class="cells-drew"></h3>
+    <button>Refresh</button>
+    <canvas></canvas>
+  </section>
+
+  <section id="section-2d-line">
+    <h2>5000 * 5000 World 10% filled</h2>
+    <h2>2D canvas with line() then stroke() <code class="exec-time"></code></h2>
+    <label>
+        Downsampling factor
+        <select class="ds-factor">
+          <option value="1" selected>x1</option>
+          <option value="4">x4</option>
+          <option value="9">x9</option>
+        </select>
+      </label>
+    <h3 class="cells-drew"></h3>
+    <button>Refresh</button>
+    <canvas></canvas>
+  </section>
+
+  <section id="section-image-data">
+    <h2>5000 * 5000 World 10% filled</h2>
+    <h2>Using canvas image data <code class="exec-time"></code></h2>
+    <label>
+      Downsampling factor
+      <select class="ds-factor">
+        <option value="1" selected>x1</option>
+        <option value="4">x4</option>
+        <option value="9">x9</option>
+      </select>
+    </label>
+    <h3 class="cells-drew"></h3>
+    <button>Refresh</button>
+    <canvas></canvas>
+  </section>
+
+
+  <section id="section-webgl-pixie">
+    <h2>500 * 500 World 10% filled</h2>
+    <h2>WebGL canvas using PixiJS <code class="exec-time"></code></h2>
+    <h3 class="cells-drew"></h3>
+    <button>Refresh</button>
+  </section>
+
+
+
+</body>
+
+</html>
