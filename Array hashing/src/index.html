@@ -7,7 +7,33 @@
 </head>
 
 <body>
-  <h1>Output in console</h1>
+  <h1>Tuple array hashing test</h1>
+  <p>Take a set of XY tuples in the form of an UintArray. [x1, y1, x2, y2, x3, y3, ..]</p>
+  <p>Compare it to another set: </p>
+  <span>The sets are equivalent if the XY tuples move index in the array: </span>
+  <code> [x1, y1, x2, y2] = [x2, y2, x1, y1] </code>
+  <span>The sets are NOT equivalent if the XY tuples are not the same: </span>
+  <code> [x1, y1, x2, y2] = [x1, y1, x3, y3] </code>
+
+  <br>
+  <p>To compare quickly a Hashing method is used: </p>
+  <span>Take a set and reduce each tuple to a single int (same number of states): </span>
+  <code>reduceToSingle([x1, y1, x2, y2, x3, y3, ...]) => [t1, t2, t3, ...] </code>
+  <span>Take this new array and calculate the cum sum and cum mult of every element: </span>
+  <code>[t1, t2, t3, ...] => t1 + t2 + t3</code>
+  <code>[t1, t2, t3, ...] => t1 * t2 * t3</code>
+  <span>If two sets are equivalent per the rules above, them the cum sums and cum mults are equal:</span>
+  <code> cumSum([x1, y1, x2, y2]) = cumSum([x2, y2, x1, y1]) </code>
+  <code> cumMult([x1, y1, x2, y2]) = cumMult([x2, y2, x1, y1]) </code>
+  <span>If both are true then the sets are equivalent</span>
+  <span>cumSum is very fast to compute (compared to elementwise) and can be used as a hash of the set</span>
+  <span>cumMult is too slow</span>
+
+  <button id="btn-run-10">Run test for arrays with 10 tuples</button>
+  <button id="btn-run-20000">Run test for arrays with 20000 tuples</button>
+  <span>Output in console</span>
+
+
 </body>
 
 </html>

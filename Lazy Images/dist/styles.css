@@ -1,2 +1,2 @@
-body{background-color:deepskyblue}body main{display:grid;grid-template-columns:33% 33% 33%;grid-column-gap:10px;grid-row-gap:10px;width:100%;max-width:800px;margin:auto}body main img{width:100%;min-height:200px;transition:all 0.2s}body main img:hover{transform:scale(1.1)}@media only screen and (max-width: 780px){body>main{grid-template-columns:100%}}
+body{background-color:#293a4b}body main{display:grid;grid-template-columns:33% 33% 33%;grid-column-gap:10px;grid-row-gap:10px;width:100%;max-width:800px;margin:auto}body main img{width:100%;min-height:200px;transition:all 0.2s}body main img:hover{transform:scale(1.1)}@media only screen and (max-width: 780px){body>main{grid-template-columns:100%}}header{text-align:center;font-size:2em}
 

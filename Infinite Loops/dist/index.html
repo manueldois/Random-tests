@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="styles.css">
+    <title>Infinite loops</title>
+    <link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <main>
+        <h2>Infinite looping in JS without growing call stack</h2>
+        <p>We have a function (render) that returns a promise when done, that we want to run every 20ms.</p>
+        <p>The next call only starts when the previous function call is done.</p>
+        <p>A setInterval of 20ms does not work here because it ignores the run duration of the previous call.</p>
+
+        <section id="section-setTimeout-sequence">
+            <h2>Solution one using setTimeout sequence. </h2>
+            <p>When the function resolves it starts a timeout that
+                then runs the function again after 20ms.</p>
+            <p>This should make call stack grow forever </p>
+            <p>Start the setTimeout sequence, then go to Inspect > Sources > index.js and add a breakpoint in
+                loopSetTimeoutSequence and look at the call stack size </p>
+            <button class="start">Start setTimeout sequence</button>
+            <button class="stop">Stop setTimeout sequence</button>
+            <h3>Iterations count: <code class="iterations-count"></code></h3>
+            <h3>Heap size: <code class="heap-size"></code></h3>
+        </section>
+
+
+        <section id="section-setInterval-1">
+            <h2>Solution two using constant setInterval of one tick </h2>
+            <p>An interval is always running every tick. When the function resolves, the time is saved, if 20ms have
+                passed since the last run, the function is called again</p>
+            <p>This should NOT make call stack grow forever </p>
+
+            <button class="start">Start setInterval</button>
+            <button class="stop">Stop setInterval</button>
+            <h3>Iterations count: <code class="iterations-count"></code></h3>
+            <h3>Heap size: <code class="heap-size"></code></h3>
+        </section>
+
+    </main>
+    <script type="text/javascript" src="index.js"></script>
+</body>
+
+</html>

@@ -1,2 +1,2 @@
-body{min-width:100vw;min-height:100vh;background-color:#293a4b;margin:0;padding:10px;font-family:Ubuntu, Verdana, Geneva, Tahoma, sans-serif;color:white;box-sizing:border-box}section canvas{display:block}label{font-size:1.2em}label>code.execTime{margin-left:10px}
+body{min-width:100vw;min-height:100vh;background-color:#293a4b;margin:0;padding:10px;font-family:Ubuntu, Verdana, Geneva, Tahoma, sans-serif;color:white;box-sizing:border-box}code{display:block;padding:10px;background-color:#252525;width:fit-content}span{margin-top:10px;display:block}button{margin-top:20px}
 

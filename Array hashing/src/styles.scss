@@ -10,15 +10,18 @@ body {
   box-sizing: border-box;
 }
 
-section {
-  canvas {
-    display: block;
-  }
+code {
+  display: block;
+  padding: 10px;
+  background-color: rgb(37, 37, 37);
+  width: fit-content;
 }
 
-label {
-  font-size: 1.2em;
-  > code.execTime {
-    margin-left: 10px;
-  }
+span {
+  margin-top: 10px;
+  display: block;
+}
+
+button {
+  margin-top: 20px
 }

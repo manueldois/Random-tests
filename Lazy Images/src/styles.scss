@@ -1,5 +1,5 @@
 body {
-  background-color: deepskyblue;
+    background-color: #293a4b;
   main {
     display: grid;
     grid-template-columns: 33% 33% 33%;
@@ -26,4 +26,9 @@ body {
   body > main {
     grid-template-columns: 100%;
   }
+}
+
+header {
+  text-align: center;
+  font-size: 2em;
 }

@@ -1,27 +1,23 @@
 import './styles.scss'
-import { Timeline, setTimeoutPromise, rgbToHex } from './util'
+import { Timeline } from './util'
 
 console.log('STARTING ARRAY HASHING TEST')
 
 // Build Tuple Array with XY coords of cells
-main()
-async function main() {
-    let ARRAY_A: Uint16Array, ARRAY_B: Uint16Array, TEST_SIZE = 10000
+
+function runAllTests(TEST_SIZE) {
+    let ARRAY_A: Uint16Array, ARRAY_B: Uint16Array
     const HALF_INDEX = Math.floor(TEST_SIZE / 2)
+    const MAX_RADIUS = TEST_SIZE
     console.log("Array sizes: ", TEST_SIZE)
 
-    // console.log(two16ToOne32(2 ** 16, 0))
-    // console.log(two16ToOne32(2 ** 16, 1))
-    // console.log(two16ToOne32(0, 2 ** 16))
-    // console.log(two16ToOne32(1, 2 ** 16))
-
     console.log("\n Testing indexwise equal XY sets...")
-    ARRAY_A = XYSpiral(TEST_SIZE, 10000)
-    ARRAY_B = XYSpiral(TEST_SIZE, 10000)
+    ARRAY_A = XYSpiral(TEST_SIZE, MAX_RADIUS)
+    ARRAY_B = XYSpiral(TEST_SIZE, MAX_RADIUS)
     testCompareXYArrays(ARRAY_A, ARRAY_B)
 
-    console.log("\n Testing non-indexwise equal XY sets...")
-    ARRAY_A = XYSpiral(TEST_SIZE, 10000)
+    console.log("\n Testing equal XY sets where one array is the first but shifted 2 indexes...")
+    ARRAY_A = XYSpiral(TEST_SIZE, MAX_RADIUS)
     // B is A shifted left (first tuple is A's second, last tuple is A's first)
     for (let i = 0; i < ARRAY_A.length - 2; i += 2) {
         ARRAY_B[i] = ARRAY_A[i + 2];
@@ -31,30 +27,31 @@ async function main() {
     ARRAY_B[ARRAY_B.length - 1] = ARRAY_A[1]
     testCompareXYArrays(ARRAY_A, ARRAY_B)
 
-    console.log("\n Testing different XY sets...")
-    ARRAY_A = XYSpiral(TEST_SIZE, 10000)
-    ARRAY_B = XYSpiral(TEST_SIZE, 10001)
+    console.log("\n Testing totaly different XY sets...")
+    ARRAY_A = XYSpiral(TEST_SIZE, MAX_RADIUS)
+    ARRAY_B = XYSpiral(TEST_SIZE, MAX_RADIUS, 2)
     testCompareXYArrays(ARRAY_A, ARRAY_B)
 
     console.log("\n Testing sets one element different...")
-    ARRAY_A = XYSpiral(TEST_SIZE, 10000)
-    ARRAY_B = XYSpiral(TEST_SIZE, 10000)
+    ARRAY_A = XYSpiral(TEST_SIZE, MAX_RADIUS)
+    ARRAY_B = XYSpiral(TEST_SIZE, MAX_RADIUS)
     ARRAY_B[HALF_INDEX] = 999
     testCompareXYArrays(ARRAY_A, ARRAY_B)
 
     console.log("\n Testing sets two elements different...")
-    ARRAY_A = XYSpiral(TEST_SIZE, 10000)
-    ARRAY_B = XYSpiral(TEST_SIZE, 10000)
+    ARRAY_A = XYSpiral(TEST_SIZE, MAX_RADIUS)
+    ARRAY_B = XYSpiral(TEST_SIZE, MAX_RADIUS)
     ARRAY_B[HALF_INDEX] = 999
     ARRAY_B[HALF_INDEX + 1] = -999
     testCompareXYArrays(ARRAY_A, ARRAY_B)
 }
 
 function testCompareXYArrays(ARRAY_A: Uint16Array, ARRAY_B: Uint16Array) {
+    console.log("Array A: ", ARRAY_A, "Array B: ", ARRAY_B)
     const TIMELINE = new Timeline('Compare two arrays')
 
-    const XY_HASH_A = XYArraytoHash(ARRAY_A)
-    const XY_HASH_B = XYArraytoHash(ARRAY_B)
+    const XY_HASH_A = reduceToSingle(ARRAY_A)
+    const XY_HASH_B = reduceToSingle(ARRAY_B)
     TIMELINE.mark('HashXY')
 
     const CUM_SUM_XY_HASH_A = cumSum(XY_HASH_A)
@@ -66,45 +63,40 @@ function testCompareXYArrays(ARRAY_A: Uint16Array, ARRAY_B: Uint16Array) {
     TIMELINE.mark('Cummult hash')
 
     const ELEMENTWISE_XYHASH_COMPARE = elementwiseCompareSet(XY_HASH_A, XY_HASH_B)
-    TIMELINE.mark('Elementwise hash compare')
+    TIMELINE.mark('Elementwise singles compare')
     TIMELINE.end()
 
     console.log("cumSum equal: ", CUM_SUM_XY_HASH_A == CUM_SUM_XY_HASH_B)
     console.log("cumMult equal: ", CUM_MULT_XY_HASH_A == CUM_MULT_XY_HASH_B)
-    console.log("Elementwise xyhash equal: ", ELEMENTWISE_XYHASH_COMPARE)
+    console.log("Elementwise singles array equivalent: ", ELEMENTWISE_XYHASH_COMPARE)
 
     console.log(TIMELINE.TIMES)
 }
 
-function XYSpiral(N_POINTS: number, SIZE: number, N_REVOLUTIONS: number = 1) {
+function XYSpiral(N_POINTS: number, MAX_RADIUS: number, N_REVOLUTIONS: number = 1) {
     const XY1 = new Uint16Array(N_POINTS * 2)
     for (let i = 0; i <= XY1.length; i += 2) {
         const ANGLE = (i / XY1.length) * 360 * N_REVOLUTIONS
-        const DISTANCE = (i / XY1.length) * SIZE / 2
-        const X = Math.cos(ANGLE / (2 * Math.PI)) * DISTANCE + SIZE / 2
-        const Y = Math.sin(ANGLE / (2 * Math.PI)) * DISTANCE + SIZE / 2
+        const DISTANCE = (i / XY1.length) * MAX_RADIUS / 2
+        const X = Math.cos(ANGLE / (2 * Math.PI)) * DISTANCE + MAX_RADIUS / 2
+        const Y = Math.sin(ANGLE / (2 * Math.PI)) * DISTANCE + MAX_RADIUS / 2
         XY1[i] = X
         XY1[i + 1] = Y
     }
     return XY1
 }
 
-function XYArraytoHash(ARRAY: Uint16Array) {
-    const HASHARRAY = new Uint32Array(ARRAY.length / 2)
+function reduceToSingle(ARRAY: Uint16Array): Uint32Array {
+    const SINGLES_ARRAY = new Uint32Array(ARRAY.length / 2)
     for (let i = 0; i < ARRAY.length; i += 2) {
-        HASHARRAY[i / 2] = two16ToOne32(ARRAY[i], ARRAY[i + 1])
+        SINGLES_ARRAY[i / 2] = two16ToOne32(ARRAY[i], ARRAY[i + 1])
     }
-    return HASHARRAY
-}
-
-function two32ToOne64(X: number, Y: number) {
-    return BigInt(X * 2 ** 32 + Y)
+    return SINGLES_ARRAY
 }
 
 function two16ToOne32(X: number, Y: number) {
     return (X * 2 ** 16 + Y)
 }
-
 
 function cumSum(ARRAY: any) {
     let acc = 0
@@ -146,3 +138,11 @@ function elementwiseCompareSet(ARRAY_A: any, ARRAY_B: any) {
     return true
 }
 
+
+document.getElementById('btn-run-10').addEventListener('click', () => {
+    runAllTests(10)
+})
+
+document.getElementById('btn-run-20000').addEventListener('click', () => {
+    runAllTests(20000)
+})
